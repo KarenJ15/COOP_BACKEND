@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class TaxiController {
     }
     
     /* ================ CREATE ================ */
+    @Secured({"ROLE_DRIVER"})
     @PostMapping()
     public ResponseEntity<TaxiDTO> create(@Valid @RequestBody NewTaxiDTO taxiDTO){
         TaxiDTO result = service.create(taxiDTO);
@@ -40,6 +42,7 @@ public class TaxiController {
     }
 
     /* ================ RETRIEVE ================ */
+    @Secured({"ROLE_DRIVER","ROLE_TRAVELER"})
     @GetMapping("/{id}")
     public ResponseEntity<TaxiDTO> retrive(@PathVariable("id") Long id){
         TaxiDTO result = service.retrieve(id);
@@ -47,6 +50,7 @@ public class TaxiController {
     }
 
     /* ================ UPDATE ================ */
+    @Secured({"ROLE_DRIVER"})
     @PutMapping("/{id}")
     public ResponseEntity<TaxiDTO> update(@RequestBody TaxiDTO taxiDTO, @PathVariable("id") Long id){
         TaxiDTO result = service.update(taxiDTO, id);
@@ -54,6 +58,7 @@ public class TaxiController {
     }
 
     /* ================ DELETE ================ */
+    @Secured({"ROLE_DRIVER"})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
         service.delete(id);
@@ -61,6 +66,7 @@ public class TaxiController {
     }
 
     /* ================ COUNT ================ */
+    @Secured({"ROLE_DRIVER","ROLE_TRAVELER"})
      @GetMapping("/count")
      public ResponseEntity<Long> count(){
          long result = service.count();
@@ -68,6 +74,7 @@ public class TaxiController {
      }
 
     /* ================ LIST ================ */
+    @Secured({"ROLE_DRIVER","ROLE_TRAVELER"})
     @GetMapping("/{page}/{size}")
     public ResponseEntity<List<TaxiListDTO>> list(@PathVariable("page") int page, 
         @PathVariable("size") int size,

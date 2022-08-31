@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ public class TravelController {
     }
 
     /* ================ CREATE ================ */
+    @Secured({"ROLE_TRAVELER"})
     @PostMapping("/{id}/travels")
     public ResponseEntity<TravelDTO> create(@PathVariable("id") Long id, @Valid @RequestBody NewTravelDTO travelDTO){
         TravelDTO traveDTO = service.create(id, travelDTO);
@@ -39,13 +41,15 @@ public class TravelController {
     }
 
     /* ================ RETRIEVE ================ */
+    @Secured({"ROLE_TRAVELER"})
     @GetMapping("/{idTaxi}/travels/{id}")
     public ResponseEntity<TravelTaxiDTO> retrive(@PathVariable("idTaxi") Long idTaxi, @PathVariable("id") Long id){
         TravelTaxiDTO result = service.retrieve(idTaxi, id);
         return ResponseEntity.ok().body(result);        
     }
-
+    
     /* ================ UPDATE ================ */
+    @Secured({"ROLE_TRAVELER"})
     @PutMapping("/{idTaxi}/travels/{id}")
     public ResponseEntity<TravelTaxiDTO> update(@RequestBody TravelDTO travelDTO, @PathVariable("idTaxi") Long idTaxi, @PathVariable("id") Long id){
         TravelTaxiDTO result = service.update(travelDTO, idTaxi, id);
@@ -53,6 +57,7 @@ public class TravelController {
     }
 
     /* ================ DELETE ================ */
+    @Secured({"ROLE_TRAVELER"})
     @DeleteMapping("/{idTaxi}/travels/{id}")
     public ResponseEntity<Void> delete(@PathVariable("idTaxi") Long idTaxi, @PathVariable("id") Long id){
         service.delete(idTaxi, id);
@@ -60,6 +65,7 @@ public class TravelController {
     }
 
     /* ================ COUNT ================ */
+    @Secured({"ROLE_DRIVER","ROLE_TRAVELER"})
     @GetMapping("/{id}/travels/count")
     public ResponseEntity<Long> count(){
         long result = service.count();
@@ -67,6 +73,7 @@ public class TravelController {
     }
 
     /* ================ LIST ================ */
+    @Secured({"ROLE_DRIVER","ROLE_TRAVELER"})
     @GetMapping("/{id}/travels")
     public ResponseEntity<List<TravelDTO>> list(@PathVariable("id") Long id){
         List<TravelDTO> travels = service.list(id);
